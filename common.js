@@ -31,3 +31,5 @@ function httpGet(){
 	}
 	return result;
 }
+
+const $_GET = httpGet();
