@@ -77,7 +77,7 @@ class Server {
 		this.socket = null;
 		this.onopen = [];
 		this.onclose = [];
-		this.onmessage = null;
+		this.onmessage = {};
 	}
 
 	setUrl(url){
