@@ -16,6 +16,38 @@ function enums(options){
 	return object;
 }
 
+function declareCommands(){
+	var commands = [
+		'Invalid',
+
+		'CheckVersion',
+
+		'Login',
+		'Logout',
+
+		'RequestRoomId',
+
+		'CreateRoom',
+		'EnterRoom',
+		'UpdateRoom',
+
+		'SetUserList',
+		'AddUser',
+		'RemoveUser',
+
+		'Speak',
+		'LoadGame',
+
+		'NetworkCommandCount'
+	];
+
+	for (let command of arguments) {
+		commands.push(command);
+	}
+
+	return enums(commands);
+}
+
 function httpGet(){
 	var i = location.href.indexOf('?');
 	if(i <= 0){
