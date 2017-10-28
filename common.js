@@ -26,6 +26,7 @@ function declareCommands(){
 		'Logout',
 
 		'RequestRoomId',
+		'RequestUserId',
 
 		'CreateRoom',
 		'EnterRoom',
