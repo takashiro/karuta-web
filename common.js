@@ -37,7 +37,7 @@ function declareCommands(){
 		'RemoveUser',
 
 		'Speak',
-		'LoadGame',
+		'StartGame',
 
 		'NetworkCommandCount'
 	];
