@@ -1,11 +1,21 @@
 
+let $_MODULE = {};
+
 function require(lib, callback = null){
-	var script = document.createElement('script');
-	script.src = 'js/' + lib + '.js';
-	if(callback){
-		script.onload = callback;
+	let onload = ()=>{
+		$_MODULE[lib] && $_MODULE[lib]();
+		callback && callback();
+	};
+
+	if (!$_MODULE.hasOwnProperty(lib)) {
+		let script = document.createElement('script');
+		script.src = 'js/' + lib + '.js';
+		script.onload = onload;
+		$_MODULE[lib] = null;
+		document.body.appendChild(script);
+	} else {
+		onload();
 	}
-	document.body.appendChild(script);
 }
 
 function enums(options){
