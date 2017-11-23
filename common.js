@@ -1,5 +1,5 @@
 
-let $_MODULE = {};
+const $_MODULE = {};
 
 function require(lib, callback = null){
 	let onload = ()=>{
@@ -14,7 +14,7 @@ function require(lib, callback = null){
 		$_MODULE[lib] = null;
 		document.body.appendChild(script);
 	} else {
-		onload();
+		setTimeout(onload, 0);
 	}
 }
 
