@@ -143,7 +143,7 @@ class Server {
 		}
 	}
 
-	get isConnected(){
+	get connected(){
 		return this.socket != null;
 	}
 
