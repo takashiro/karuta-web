@@ -1,7 +1,7 @@
 
 const $_MODULE = {};
 
-function require(lib, callback = null){
+function loadscript(lib, callback = null){
 	let onload = ()=>{
 		$_MODULE[lib] && $_MODULE[lib]();
 		callback && callback();
