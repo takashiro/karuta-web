@@ -1,32 +1,38 @@
 
-const $_MODULE = {};
+(() => {
+	const $_MODULE = {};
 
-function loadscript(lib, callback = null){
-	let onload = ()=>{
-		$_MODULE[lib] && $_MODULE[lib]();
-		callback && callback();
+	window.LoadScript = (lib, callback = null) => {
+		let onload = ()=>{
+			$_MODULE[lib] && $_MODULE[lib]();
+			callback && callback();
+		};
+
+		if (!$_MODULE.hasOwnProperty(lib)) {
+			let script = document.createElement('script');
+			script.src = 'js/' + lib + '.js';
+			script.onload = onload;
+			$_MODULE[lib] = null;
+			document.body.appendChild(script);
+		} else {
+			setTimeout(onload, 0);
+		}
 	};
 
-	if (!$_MODULE.hasOwnProperty(lib)) {
-		let script = document.createElement('script');
-		script.src = 'js/' + lib + '.js';
-		script.onload = onload;
-		$_MODULE[lib] = null;
-		document.body.appendChild(script);
-	} else {
-		setTimeout(onload, 0);
-	}
-}
+	window.DeclareModule = (lib, func) => {
+		$_MODULE[lib] = func;
+	};
+})();
 
-function enums(options){
+function DeclareEnum(){
 	var object = {};
-	for(let i = 0; i < options.length; i++){
-		object[options[i]] = i;
+	for(let i = 0; i < arguments.length; i++){
+		object[arguments[i]] = i;
 	}
 	return object;
 }
 
-function declareCommands(){
+function DeclareCommand(){
 	var commands = [
 		'Invalid',
 
@@ -56,10 +62,10 @@ function declareCommands(){
 		commands.push(command);
 	}
 
-	return enums(commands);
+	return DeclareEnum.apply(null, commands);
 }
 
-function makeToast(data){
+function MakeToast(data){
 	if(typeof data == 'string'){
 		data = {
 			'message' : data,
@@ -96,7 +102,7 @@ function makeToast(data){
 	}, 1500);
 }
 
-function httpGet(){
+function HttpGet(){
 	var i = location.href.indexOf('?');
 	if(i <= 0){
 		return {};
@@ -112,4 +118,4 @@ function httpGet(){
 	return result;
 }
 
-const $_GET = httpGet();
+const $_GET = HttpGet();

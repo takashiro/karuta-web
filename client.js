@@ -70,7 +70,7 @@ class Packet {
 
 }
 
-class Server {
+class Client {
 
 	constructor(url){
 		this.setUrl(url);
@@ -112,25 +112,24 @@ class Server {
 			return false;
 		}
 
-		var server = this;
 		this.socket = new WebSocket(this.url);
 		this.socket.binaryType = 'arraybuffer';
-		this.socket.onopen = function(){
-			for(var i = 0; i < server.onopen.length; i++){
-				server.onopen[i]();
+		this.socket.onopen = () => {
+			for(var i = 0; i < this.onopen.length; i++){
+				this.onopen[i]();
 			}
 		};
-		this.socket.onmessage = function(e){
+		this.socket.onmessage = e => {
 			var packet = new Packet(e.data);
-			if (server.onmessage && server.onmessage[packet.command]) {
-				server.onmessage[packet.command](packet.arguments);
+			if (this.onmessage && this.onmessage[packet.command]) {
+				this.onmessage[packet.command](packet.arguments);
 			}
 		};
-		this.socket.onclose = function(e){
-			for(var i = 0; i < server.onclose.length; i++){
-				server.onclose[i](e);
+		this.socket.onclose = e => {
+			for(var i = 0; i < this.onclose.length; i++){
+				this.onclose[i](e);
 			}
-			server.socket = null;
+			this.socket = null;
 		};
 
 		return true;
