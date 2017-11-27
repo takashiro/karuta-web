@@ -3,17 +3,21 @@
 	const $_MODULE = {};
 
 	window.LoadScript = (lib, callback = null) => {
-		let onload = ()=>{
+		let onload = () => {
 			$_MODULE[lib] && $_MODULE[lib]();
-			callback && callback();
+			callback && callback(true);
 		};
 
 		if (!$_MODULE.hasOwnProperty(lib)) {
 			let script = document.createElement('script');
 			script.src = 'js/' + lib + '.js';
 			script.onload = onload;
+			script.onerror = () => {
+				alert('Failed to load ' + lib);
+				callback(false);
+			};
 			$_MODULE[lib] = null;
-			document.body.appendChild(script);
+			document.head.append(script);
 		} else {
 			setTimeout(onload, 0);
 		}
