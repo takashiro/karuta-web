@@ -17,7 +17,7 @@
 				callback(false);
 			};
 			$_MODULE[lib] = null;
-			document.head.append(script);
+			document.body.appendChild(script);
 		} else {
 			setTimeout(onload, 0);
 		}
