@@ -2,6 +2,8 @@
 (() => {
 	const $_MODULE = {};
 
+	window.ScriptLoader = document.body;
+
 	window.LoadScript = (lib, callback = null) => {
 		let onload = () => {
 			$_MODULE[lib] && $_MODULE[lib]();
@@ -17,7 +19,7 @@
 				callback(false);
 			};
 			$_MODULE[lib] = null;
-			document.body.appendChild(script);
+			ScriptLoader.appendChild(script);
 		} else {
 			setTimeout(onload, 0);
 		}
