@@ -31,7 +31,7 @@
 })();
 
 function DeclareEnum(){
-	var object = {};
+	let object = {};
 	for(let i = 0; i < arguments.length; i++){
 		object[arguments[i]] = i;
 	}
@@ -39,7 +39,7 @@ function DeclareEnum(){
 }
 
 function DeclareCommand(){
-	var commands = [
+	let commands = [
 		'Invalid',
 
 		'CheckVersion',
@@ -79,7 +79,7 @@ function MakeToast(data){
 		};
 	}
 
-	var toast = $('<div class="toast"></div>');
+	let toast = $('<div class="toast"></div>');
 	toast.html(data.message);
 	toast.appendTo($('body'));
 
@@ -109,12 +109,12 @@ function MakeToast(data){
 }
 
 function HttpGet(){
-	var i = location.href.indexOf('?');
-	if(i <= 0){
+	let pos = location.href.indexOf('?');
+	if(pos <= 0){
 		return {};
 	}
-	var query_string = location.href.substr(i + 1).split('&');
-	var result  = {};
+	let query_string = location.href.substr(pos + 1).split('&');
+	let result  = {};
 	for(let i = 0; i < query_string.length; i++){
 		let pair = query_string[i].split('=');
 		if(pair.length > 1){

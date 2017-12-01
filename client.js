@@ -11,25 +11,25 @@ class Packet {
 	}
 
 	toBlob(){
-		var parts = [this.num2bit(this.command), this.num2bit(this.timeout)];
+		let parts = [this.num2bit(this.command), this.num2bit(this.timeout)];
 		if(this.arguments){
-			var args = JSON.stringify(this.arguments);
-			var encoder = new TextEncoder('utf-8');
+			let args = JSON.stringify(this.arguments);
+			let encoder = new TextEncoder('utf-8');
 			parts.push(encoder.encode(args));
 		}
 		return new Blob(parts);
 	}
 
 	parseBlob(data){
-		var buffer = {
+		let buffer = {
 			'view' : new DataView(data, 0),
 			'offset' : 0
 		};
 		this.command = this.bit2num(buffer);
 		this.timeout = this.bit2num(buffer);
-		var raw = new Uint8Array(data.slice(buffer.offset));
-		var decoder = new TextDecoder('utf-8');
-		var args = decoder.decode(raw);
+		let raw = new Uint8Array(data.slice(buffer.offset));
+		let decoder = new TextDecoder('utf-8');
+		let args = decoder.decode(raw);
 		this.arguments = JSON.parse(args);
 	}
 
@@ -38,15 +38,15 @@ class Packet {
 			return new Int8Array([value]);
 		} else {
 			if(-32768 <= value && value <= 32767){
-				var arr = new Int8Array(3);
+				let arr = new Int8Array(3);
 				arr[0] = 0x81;
 				arr[1] = value & 0xFF;
 				arr[2] = value >> 8;
 				return arr;
 			}else{
-				var arr = new Int8Array(5);
+				let arr = new Int8Array(5);
 				arr[0] = 0x80;
-				for(var i = 1; i <= 4; i++){
+				for(let i = 1; i <= 4; i++){
 					arr[i] = value & 0xFF;
 					value >>= 8;
 				}
@@ -56,7 +56,7 @@ class Packet {
 	}
 
 	bit2num(buffer){
-		var value = buffer.view.getInt8(buffer.offset);
+		let value = buffer.view.getInt8(buffer.offset);
 		buffer.offset++;
 		if(value == -127){
 			value = buffer.view.getInt16(buffer.offset, true);
@@ -82,13 +82,13 @@ class Client {
 
 	setUrl(url){
 		if(url){
-			var absolute_path = /^\w+:\/\/.+/i;
+			let absolute_path = /^\w+:\/\/.+/i;
 			if(absolute_path.test(url)){
 				this.url = url;
 			}else{
-				var domain_split = url.indexOf('/');
-				var domain = '';
-				var path = '';
+				let domain_split = url.indexOf('/');
+				let domain = '';
+				let path = '';
 				if(domain_split == -1){
 					domain = url;
 				}else{
@@ -115,18 +115,18 @@ class Client {
 		this.socket = new WebSocket(this.url);
 		this.socket.binaryType = 'arraybuffer';
 		this.socket.onopen = () => {
-			for(var i = 0; i < this.onopen.length; i++){
+			for(let i = 0; i < this.onopen.length; i++){
 				this.onopen[i]();
 			}
 		};
 		this.socket.onmessage = e => {
-			var packet = new Packet(e.data);
+			let packet = new Packet(e.data);
 			if (this.onmessage && this.onmessage[packet.command]) {
 				this.onmessage[packet.command](packet.arguments);
 			}
 		};
 		this.socket.onclose = e => {
-			for(var i = 0; i < this.onclose.length; i++){
+			for(let i = 0; i < this.onclose.length; i++){
 				this.onclose[i](e);
 			}
 			this.socket = null;
@@ -147,7 +147,7 @@ class Client {
 	}
 
 	request(command, args = null){
-		var packet = new Packet;
+		let packet = new Packet;
 		packet.command = command;
 		packet.arguments = args;
 		packet.timeout = 0;
