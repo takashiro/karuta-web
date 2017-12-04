@@ -143,7 +143,15 @@ class Client {
 	}
 
 	get connected(){
-		return this.socket != null;
+		return this.socket && this.socket.readyState == WebSocket.OPEN;
+	}
+
+	get state(){
+		if (this.socket) {
+			return this.socket.readyState;
+		} else {
+			return WebSocket.CONNECTING;
+		}
 	}
 
 	request(command, args = null){
