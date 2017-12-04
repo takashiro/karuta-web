@@ -78,6 +78,7 @@ class Client {
 		this.onopen = [];
 		this.onclose = [];
 		this.onmessage = {};
+		this.onerror = [];
 	}
 
 	setUrl(url){
@@ -115,20 +116,20 @@ class Client {
 		this.socket = new WebSocket(this.url);
 		this.socket.binaryType = 'arraybuffer';
 		this.socket.onopen = () => {
-			for(let i = 0; i < this.onopen.length; i++){
-				this.onopen[i]();
-			}
+			this.trigger('open');
 		};
 		this.socket.onmessage = e => {
-			let packet = new Packet(e.data);
-			if (this.onmessage && this.onmessage[packet.command]) {
-				this.onmessage[packet.command](packet.arguments);
+			try {
+				let packet = new Packet(e.data);
+				if (this.onmessage && this.onmessage[packet.command]) {
+					this.onmessage[packet.command](packet.arguments);
+				}
+			} catch (e) {
+				this.trigger('error', e);
 			}
 		};
 		this.socket.onclose = e => {
-			for(let i = 0; i < this.onclose.length; i++){
-				this.onclose[i](e);
-			}
+			this.trigger('close', e);
 			this.socket = null;
 		};
 
@@ -163,13 +164,22 @@ class Client {
 	}
 
 	on(event, callback){
-		switch(event){
-		case 'open':
-			this.onopen.push(callback);
-			break;
-		case 'close':
-			this.onclose.push(callback);
-			break;
+		var callbacks = this['on' + event];
+		if (callbacks) {
+			callbacks.push(callback);
+		}
+	}
+
+	trigger(event){
+		let args = [];
+		for (let i = 1; i < arguments.length; i++) {
+			args.push(arguments[i]);
+		}
+		let callbacks = this['on' + event];
+		if (callbacks) {
+			for (let callback of callbacks) {
+				callback.apply(null, args);
+			}
 		}
 	}
 
