@@ -64,8 +64,8 @@ function DeclareCommand(){
 		'NetworkCommandCount'
 	];
 
-	for (let command of arguments) {
-		commands.push(command);
+	for (let i = 0; i < arguments.length; i++) {
+		commands.push(arguments[i]);
 	}
 
 	return DeclareEnum.apply(null, commands);
