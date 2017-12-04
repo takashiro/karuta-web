@@ -3306,6 +3306,13 @@
       TextDecoder: global['TextDecoder'],
       EncodingIndexes: global["encoding-indexes"]
     };
+  } else {
+    if (!window.TextEncoder) {
+	  window.TextEncoder = global.TextEncoder;
+	}
+    if (!window.TextDecoder) {
+      window.TextDecoder = global.TextDecoder;
+	}
   }
 
 // For strict environments where `this` inside the global scope
